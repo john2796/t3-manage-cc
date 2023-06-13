@@ -1,11 +1,16 @@
 import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { api } from "@/utils/api";
 
 const AuthShowcase: React.FC = () => {
-  const { data: session } = useSession();
+  const { data: sessionData } = useSession();
+  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
+    undefined,
+    { enabled: sessionData?.user !== undefined }
+  );
 
   const handleAuthButton = () => {
-    if (session) {
+    if (sessionData) {
       signOut();
     } else {
       signIn();
@@ -14,8 +19,11 @@ const AuthShowcase: React.FC = () => {
 
   return (
     <div>
+      {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+      {secretMessage && <span> - {secretMessage}</span>}
+
       <button onClick={handleAuthButton}>
-        {session ? "sign out" : "sign in"}
+        {sessionData ? "sign out" : "sign in"}
       </button>
     </div>
   );
