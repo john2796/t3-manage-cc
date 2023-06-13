@@ -1,6 +1,22 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Twitter clone using t3 stack : next.js, nextAuth.js, tailwindcss, trpc, prisma
 
-## Getting Started
+TODO:
+
+1. [] create a login using nextAuth , be able to login with google account AuthO
+2. [] CRUD tweet
+3. [] setup model, schema , router
+4. [] search for tweet
+
+## Overview configuration
+
+## NextAuth
+
+Steps:
+
+1. configure SessionProvider state (\_app.tsx)
+2. create button to login
+3. configure adapters, providers, callbacks, getServerAuthSession (sever/auth.ts)
+4.
 
 First, run the development server:
 
