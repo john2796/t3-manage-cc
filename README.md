@@ -9,14 +9,31 @@ TODO:
 
 ## Overview configuration
 
-## NextAuth
+TODO: add notes about the implementation of NextAuth
+
+## How is NextAuth implemented
 
 Steps:
 
-1. configure SessionProvider state (\_app.tsx)
-2. create button to login
-3. configure adapters, providers, callbacks, getServerAuthSession (sever/auth.ts)
-4.
+1. wrap app with SessionWrapper
+2. configure SessionProvider state (\_app.tsx)
+3. create button to login
+4. configure adapters, providers, callbacks, getServerAuthSession (sever/auth.ts)
+
+TODO : Implement CRUD
+Featutre: Tweet crud
+
+- [ ] Create new Tweet
+- [ ] Update
+- [ ] Delete
+- [ ] Possibly: add a way to upload image
+- [ ] Search tweet
+
+Comment Feature:
+
+- [ ] add comment
+- [ ] remove comment
+- [ ] edit comment
 
 First, run the development server:
 
@@ -38,10 +55,10 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [ ] [Next.js Documentation](https://nextjs.org/docs) - [ ] learn about Next.js features and API.
+- [ ] [Learn Next.js](https://nextjs.org/learn) - [ ] an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - [ ] your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
