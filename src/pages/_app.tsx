@@ -1,7 +1,7 @@
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import { Session } from "next-auth";
 import { api } from "@/utils/api";
+import { type Session } from "@prisma/client";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

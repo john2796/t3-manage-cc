@@ -1,8 +1,8 @@
-import React from "react";
+import React, { type FC } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 
-const AuthShowcase: React.FC = () => {
+const AuthShowcase: FC = () => {
   const { data: sessionData } = useSession();
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined,
@@ -11,9 +11,9 @@ const AuthShowcase: React.FC = () => {
 
   const handleAuthButton = () => {
     if (sessionData) {
-      signOut();
+      signOut().catch(console.error);
     } else {
-      signIn();
+      signIn().catch(console.error);
     }
   };
 
