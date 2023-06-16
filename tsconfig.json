@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs"
+    "**/*.mjs",
+    "test/AuthShowcase.test.js"
   ],
   "exclude": ["node_modules"]
 }
