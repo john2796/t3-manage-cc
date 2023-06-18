@@ -1,3 +1,4 @@
+import AdminDashboardLayout from "@/components/layouts/admin-dashboard-layout";
 import { api } from "@/utils/api";
 import { Course } from "@prisma/client";
 import { NextPage } from "next";
@@ -30,7 +31,7 @@ const Courses: NextPage = () => {
       <main>
         <div>
           <h2>Modal</h2>
-          <form onSubmit={handleSubmitCourse}>
+          <form onSubmit={handleSubmitCourse} className="flex flex-col gap-5">
             <input
               aria-label="title"
               placeholder="name your course here"
@@ -48,9 +49,11 @@ const Courses: NextPage = () => {
         </div>
 
         <h1>Manage Courses</h1>
-        {courses.map((course) => (
-          <CourseCard course={course} />
-        ))}
+        <AdminDashboardLayout>
+          {courses.data?.map((course) => (
+            <CourseCard course={course} />
+          ))}
+        </AdminDashboardLayout>
       </main>
     </>
   );

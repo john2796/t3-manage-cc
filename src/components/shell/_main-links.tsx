@@ -3,8 +3,12 @@ import React from "react";
 
 const links = [
   {
-    label: "Dashboard",
+    label: "Landing Page",
     href: "/",
+  },
+  {
+    label: "Dashboard",
+    href: "/dashboard",
   },
   {
     label: "Manage Course",
