@@ -3,11 +3,28 @@ import { type Course } from "@prisma/client";
 import { type NextPage } from "next";
 import { Head } from "next/document";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { FC } from "react";
 
 const Courses: NextPage = () => {
+  const router = useRouter();
+  const courseId = router.query.courseId as string;
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
   const courses = api.course.getCourses.useQuery();
   const createCourseMutation = api.course.createCourse.useMutation();
+  const courseQuery = api.course.getCourseById.useQuery(
+    {
+      courseId,
+    },
+    {
+      enabled: !!courseId,
+      onSuccess(data) {
+        console.log(data);
+      },
+    }
+  );
 
   return (
     <>
@@ -15,9 +32,25 @@ const Courses: NextPage = () => {
         <title>Mange Courses</title>
       </Head>
 
-      <form>
-        <input placeholder="name your course here" type="text" />
-        <textarea placeholder="describe your course a bit" />
+      <form
+        onSubmit={async () => {
+          await createCourseMutation.mutateAsync({
+            courseId,
+            title: name,
+          });
+        }}
+      >
+        <input
+          placeholder="name your course here"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <textarea
+          placeholder="describe your course a bit"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
         <input />
         <button type="submit">Manage</button>
       </form>
@@ -31,6 +64,7 @@ const Courses: NextPage = () => {
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
+        <div>{courseQuery?.data && JSON.stringify(courseQuery.data)}</div>
       </main>
     </>
   );
