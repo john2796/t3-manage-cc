@@ -3,6 +3,7 @@ import React from "react";
 
 const links = [
   {
+    icon: 
     label: "Landing Page",
     href: "/",
   },

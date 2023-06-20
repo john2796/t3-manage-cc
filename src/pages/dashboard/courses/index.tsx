@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { FC, SyntheticEvent, useState } from "react";
 
 const Courses: NextPage = () => {
   const courses = api.course.getCourses.useQuery();
@@ -14,7 +14,8 @@ const Courses: NextPage = () => {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
 
-  const handleSubmitCourse = async () => {
+  const handleSubmitCourse = async (e: SyntheticEvent) => {
+    e.preventDefault();
     await createCourseMutation.mutateAsync({
       title,
       description,
