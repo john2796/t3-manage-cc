@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { type FC, type ReactNode } from "react";
 import { MainLinks } from "../shell/_main-links";
 import { User } from "../shell/_user";
 

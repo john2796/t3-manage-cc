@@ -20,7 +20,9 @@ export function MainLinks() {
   return (
     <>
       {links.map((link) => (
-        <Link href={link.href}>{link.label}</Link>
+        <Link key={link.label} href={link.href}>
+          {link.label}
+        </Link>
       ))}
     </>
   );
