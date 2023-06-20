@@ -157,7 +157,7 @@ export const courseRouter = createTRPCRouter({
       return section;
     }),
 
-  swapSection: protectedProcedure
+  swapSections: protectedProcedure
     .input(
       z.object({ sectionIdSource: z.string(), sectionIdTarget: z.string() })
     )

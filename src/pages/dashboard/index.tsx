@@ -1,6 +1,4 @@
 import AdminDashboardLayout from "@/components/layouts/admin-dashboard-layout";
-import { MainLinks } from "@/components/shell/_main-links";
-import { User } from "@/components/shell/_user";
 import { type NextPage } from "next";
 import Head from "next/head";
 import React from "react";
@@ -14,9 +12,7 @@ const Dashboard: NextPage = () => {
       </Head>
 
       <main>
-        <AdminDashboardLayout>
-          <h1>Dashboard</h1>
-        </AdminDashboardLayout>
+        <AdminDashboardLayout>Dashboard</AdminDashboardLayout>
       </main>
     </>
   );
