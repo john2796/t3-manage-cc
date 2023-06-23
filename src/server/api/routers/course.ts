@@ -1,15 +1,16 @@
 import { env } from "@/env.mjs";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { TRPCError } from "@trpc/server";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const UPLOAD_MAX_FILE_SIZE = 1000000;
+
 const s3Client = new S3Client({
   region: "us-east-1",
-  endpoint: "http://localhost:9000",
+  endpoint: env.S3_DB_URL,
   forcePathStyle: true,
   credentials: {
     accessKeyId: "S3RVER",
@@ -39,6 +40,9 @@ export const courseRouter = createTRPCRouter({
     return ctx.prisma.course.findMany({
       where: {
         userId: ctx.session.user.id,
+      },
+      include: {
+        sections: true,
       },
     });
   }),
@@ -73,21 +77,53 @@ export const courseRouter = createTRPCRouter({
       return { status: "updated" };
     }),
 
+  deleteCourse: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const currentCourse = await ctx.prisma.course.findUnique({
+        where: {
+          id: input.courseId,
+        },
+      });
+
+      if (!currentCourse) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "course not found",
+        });
+      }
+
+      if (currentCourse?.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "you do not have acces to delete this course",
+        });
+      }
+
+      await ctx.prisma.course.delete({
+        where: {
+          id: currentCourse.id,
+        },
+      });
+      return currentCourse;
+    }),
+
   createPresignedUrl: protectedProcedure
     .input(z.object({ courseId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // const userId = ctx.session.user.id;
       const course = await ctx.prisma.course.findUnique({
         where: {
           id: input.courseId,
         },
       });
+
       if (!course) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "the course does not exist",
         });
       }
+
       const imageId = uuidv4();
       await ctx.prisma.course.update({
         where: {
@@ -97,6 +133,7 @@ export const courseRouter = createTRPCRouter({
           imageId,
         },
       });
+
       return createPresignedPost(s3Client, {
         Bucket: env.NEXT_PUBLIC_S3_BUCKET_NAME,
         Key: imageId,
@@ -122,7 +159,6 @@ export const courseRouter = createTRPCRouter({
         },
       });
     }),
-
   deleteSection: protectedProcedure
     .input(z.object({ sectionId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -131,83 +167,43 @@ export const courseRouter = createTRPCRouter({
           id: input.sectionId,
         },
       });
+
       if (!section) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "section not found",
         });
       }
+
       if (!section.courseId) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "section has no course",
         });
       }
+
       const course = await ctx.prisma.course.findUnique({
         where: {
           id: section.courseId,
         },
       });
+
       if (course?.userId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "you do not have access to this course",
         });
       }
+
       return section;
     }),
-
-  swapSections: protectedProcedure
-    .input(
-      z.object({ sectionIdSource: z.string(), sectionIdTarget: z.string() })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const sectionSource = await ctx.prisma.section.findUnique({
-        where: {
-          id: input.sectionIdSource,
-        },
-      });
-      if (!sectionSource) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "the source section does not exist",
-        });
-      }
-      const sectionTarget = await ctx.prisma.section.findUnique({
-        where: {
-          id: input.sectionIdTarget,
-        },
-      });
-      if (!sectionTarget) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "the target section does not exist",
-        });
-      }
-      await ctx.prisma.section.update({
-        where: {
-          id: input.sectionIdSource,
-        },
-        data: {
-          order: sectionTarget.order,
-        },
-      });
-
-      await ctx.prisma.section.update({
-        where: {
-          id: input.sectionIdTarget,
-        },
-        data: {
-          order: sectionSource.order,
-        },
-      });
-    }),
-
   createPresignedUrlForVideo: protectedProcedure
     .input(z.object({ sectionId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const section = await ctx.prisma.section.findUnique({
-        where: { id: input.sectionId },
+        where: {
+          id: input.sectionId,
+        },
       });
       if (!section) {
         throw new TRPCError({
@@ -218,18 +214,22 @@ export const courseRouter = createTRPCRouter({
       if (!section.courseId) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "the section id does not exist",
+          message: "the section has no course",
         });
       }
       const course = await ctx.prisma.course.findUnique({
-        where: { id: section.courseId },
+        where: {
+          id: section.courseId,
+        },
       });
+
       if (course?.userId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "you do not have access to this course",
         });
       }
+
       return createPresignedPost(s3Client, {
         Bucket: env.NEXT_PUBLIC_S3_BUCKET_NAME,
         Key: section.videoId,

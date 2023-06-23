@@ -1,39 +1,4 @@
-## Twitter clone using t3 stack : next.js, nextAuth.js, tailwindcss, trpc, prisma
-
-TODO:
-
-1. [] create a login using nextAuth , be able to login with google account AuthO
-2. [] CRUD tweet
-3. [] setup model, schema , router
-4. [] search for tweet
-
-## Overview configuration
-
-TODO: add notes about the implementation of NextAuth
-
-## How is NextAuth implemented
-
-Steps:
-
-1. wrap app with SessionWrapper
-2. configure SessionProvider state (\_app.tsx)
-3. create button to login
-4. configure adapters, providers, callbacks, getServerAuthSession (sever/auth.ts)
-
-TODO : Implement CRUD
-Featutre: Tweet crud
-
-- [ ] Create new Tweet
-- [ ] Update
-- [ ] Delete
-- [ ] Possibly: add a way to upload image
-- [ ] Search tweet
-
-Comment Feature:
-
-- [ ] add comment
-- [ ] remove comment
-- [ ] edit comment
+## Mange Course using t3 stack : next.js, nextAuth.js, tailwindcss, trpc, prisma
 
 First, run the development server:
 
@@ -43,6 +8,38 @@ npm run dev
 yarn dev
 # or
 pnpm dev
+```
+
+Running local s3 using s3rver
+
+```bash
+🌐 >s3rver -h
+Usage: s3rver -d <path> [options]
+
+Options:
+  -d, --directory <path>                  Data directory
+  -a, --address <value>                   Hostname or IP to bind to (default: "localhost")
+  -p, --port <n>                          Port of the http server (default: 4568)
+  -s, --silent                            Suppress log messages (default: false)
+  --key <path>                            Path to private key file for running with TLS
+  --cert <path>                           Path to certificate file for running with TLS
+  --service-endpoint <address>            Overrides the AWS service root for subdomain-style
+                                          access (default: "amazonaws.com")
+  --allow-mismatched-signatures           Prevent SignatureDoesNotMatch errors for all
+                                          well-formed signatures
+  --no-vhost-buckets                      Disables vhost-style access for all buckets
+  --configure-bucket <name> [configs...]  Bucket name and configuration files for creating
+                                          and configuring a bucket at startup
+  -v, --version                           output the version number
+  -h, --help                              display help for command
+
+Examples:
+  $ s3rver -d /tmp/s3rver -a 0.0.0.0 -p 0
+  $ s3rver -d /tmp/s3rver --configure-bucket test-bucket ./cors.xml ./website.xml
+
+ John_Miranda: ~/Desktop/t3-twitts [git:main]
+🌐 >s3rver -d /tmp/s3rver --configure-bucket test-bucket ./cors.xml
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
