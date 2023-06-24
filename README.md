@@ -1,5 +1,9 @@
 ## Mange Course using t3 stack : next.js, nextAuth.js, tailwindcss, trpc, prisma
 
+TODO:
+
+- [] adress hardcoded URL
+
 First, run the development server:
 
 ```bash
